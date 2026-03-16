@@ -5,5 +5,5 @@ internal enum ChunkAction
     None,
     Drop,
     BinaryFollows,
-    BinaryCurrent
+    BinaryCurrent,
 }

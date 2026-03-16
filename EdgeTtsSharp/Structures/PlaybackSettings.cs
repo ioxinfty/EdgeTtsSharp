@@ -1,18 +1,17 @@
-﻿namespace EdgeTtsSharp.Structures
+﻿namespace EdgeTtsSharp.Structures;
+
+/// <summary>
+///     Playback settings for a voice
+/// </summary>
+public class PlaybackSettings
 {
     /// <summary>
-    /// Playback settings for a voice
+    ///     Rate of speech
     /// </summary>
-    public class PlaybackSettings
-    {
-        /// <summary>
-        /// Rate of speech
-        /// </summary>
-        public int Rate { get; set; }
+    public int Rate { get; set; }
 
-        /// <summary>
-        /// Volume of speech
-        /// </summary>
-        public float Volume { get; set; } = 1.0f;
-    }
+    /// <summary>
+    ///     Volume of speech
+    /// </summary>
+    public float Volume { get; set; } = 1.0f;
 }

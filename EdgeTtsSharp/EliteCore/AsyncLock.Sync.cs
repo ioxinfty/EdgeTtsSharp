@@ -18,24 +18,24 @@ internal partial class AsyncLock
     /*LOCK*/
 
     public TRes LockSync<TRes>(Func<TRes> body,
-                               [CallerMemberName] string memberName = "",
-                               [CallerFilePath] string sourceFilePath = "",
-                               [CallerLineNumber] int sourceLineNumber = 0)
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         return this.LockSync(_ => body.Invoke(), memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 
     public TRes LockSync<TRes>(Func<CancellationToken, TRes> body,
-                               CancellationToken ct = default,
-                               [CallerMemberName] string memberName = "",
-                               [CallerFilePath] string sourceFilePath = "",
-                               [CallerLineNumber] int sourceLineNumber = 0)
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -65,22 +65,23 @@ internal partial class AsyncLock
         }
     }
 
-    public void LockSync(Action body, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public void LockSync(Action body, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         this.LockSync(_ => body.Invoke(), memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 
     public void LockSync(Action<CancellationToken> body,
-                         CancellationToken ct = default,
-                         [CallerMemberName] string memberName = "",
-                         [CallerFilePath] string sourceFilePath = "",
-                         [CallerLineNumber] int sourceLineNumber = 0)
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -112,17 +113,17 @@ internal partial class AsyncLock
 
 
     public bool TryLockSync(Action<CancellationToken> body,
-                            int waitForMillis = 0,
-                            CancellationToken ct = default,
-                            [CallerMemberName] string memberName = "",
-                            [CallerFilePath] string sourceFilePath = "",
-                            [CallerLineNumber] int sourceLineNumber = 0)
+        int waitForMillis = 0,
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -159,10 +160,10 @@ internal partial class AsyncLock
     }
 
     public bool TryLockSync(Action body,
-                            int waitForMillis = 0,
-                            [CallerMemberName] string memberName = "",
-                            [CallerFilePath] string sourceFilePath = "",
-                            [CallerLineNumber] int sourceLineNumber = 0)
+        int waitForMillis = 0,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         return this.TryLockSync(_ => body.Invoke(), waitForMillis, memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }

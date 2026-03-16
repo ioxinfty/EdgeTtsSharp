@@ -36,38 +36,27 @@ internal partial class AsyncLock
 
     public string? HoldingAt { get; private set; }
 
-    [Conditional("DEBUG")]
-    private void CheckDebug()
-    {
-        this.IsDebug = true;
-    }
-
-    private bool CurrentTaskAlreadyHolding()
-    {
-        return (Task.CurrentId == this.taskHolding) && (Task.CurrentId != null);
-    }
-
     /*LOCK*/
 
     public async ValueTask<TRes> Lock<TRes>(Func<Task<TRes>> body,
-                                            [CallerMemberName] string memberName = "",
-                                            [CallerFilePath] string sourceFilePath = "",
-                                            [CallerLineNumber] int sourceLineNumber = 0)
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         return await this.Lock(async _ => await body.Invoke(), memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 
     public async ValueTask<TRes> Lock<TRes>(Func<CancellationToken, Task<TRes>> body,
-                                            CancellationToken ct = default,
-                                            [CallerMemberName] string memberName = "",
-                                            [CallerFilePath] string sourceFilePath = "",
-                                            [CallerLineNumber] int sourceLineNumber = 0)
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -99,24 +88,24 @@ internal partial class AsyncLock
     }
 
     public async ValueTask Lock(Func<Task> body,
-                                [CallerMemberName] string memberName = "",
-                                [CallerFilePath] string sourceFilePath = "",
-                                [CallerLineNumber] int sourceLineNumber = 0)
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         await this.Lock(async _ => await body.Invoke(), memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 
     public async ValueTask Lock(Func<CancellationToken, Task> body,
-                                CancellationToken ct = default,
-                                [CallerMemberName] string memberName = "",
-                                [CallerFilePath] string sourceFilePath = "",
-                                [CallerLineNumber] int sourceLineNumber = 0)
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -148,24 +137,24 @@ internal partial class AsyncLock
     }
 
     public async ValueTask<TRes> Lock<TRes>(Func<TRes> body,
-                                            [CallerMemberName] string memberName = "",
-                                            [CallerFilePath] string sourceFilePath = "",
-                                            [CallerLineNumber] int sourceLineNumber = 0)
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         return await this.Lock(_ => body.Invoke(), memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 
     public async ValueTask<TRes> Lock<TRes>(Func<CancellationToken, TRes> body,
-                                            CancellationToken ct = default,
-                                            [CallerMemberName] string memberName = "",
-                                            [CallerFilePath] string sourceFilePath = "",
-                                            [CallerLineNumber] int sourceLineNumber = 0)
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -196,22 +185,23 @@ internal partial class AsyncLock
         }
     }
 
-    public async ValueTask Lock(Action body, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public async ValueTask Lock(Action body, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         await this.Lock(_ => body.Invoke(), memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 
     public async ValueTask Lock(Action<CancellationToken> body,
-                                CancellationToken ct = default,
-                                [CallerMemberName] string memberName = "",
-                                [CallerFilePath] string sourceFilePath = "",
-                                [CallerLineNumber] int sourceLineNumber = 0)
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -243,26 +233,27 @@ internal partial class AsyncLock
     }
 
     public async ValueTask<bool> TryLock(Func<Task> body,
-                                         int waitForMillis = 0,
-                                         [CallerMemberName] string memberName = "",
-                                         [CallerFilePath] string sourceFilePath = "",
-                                         [CallerLineNumber] int sourceLineNumber = 0)
+        int waitForMillis = 0,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return await this.TryLock(async _ => await body.Invoke(), waitForMillis, memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+        return await this.TryLock(async _ => await body.Invoke(), waitForMillis, memberName: memberName, sourceFilePath: sourceFilePath,
+            sourceLineNumber: sourceLineNumber);
     }
 
     public async ValueTask<bool> TryLock(Func<CancellationToken, Task> body,
-                                         int waitForMillis = 0,
-                                         CancellationToken ct = default,
-                                         [CallerMemberName] string memberName = "",
-                                         [CallerFilePath] string sourceFilePath = "",
-                                         [CallerLineNumber] int sourceLineNumber = 0)
+        int waitForMillis = 0,
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -300,26 +291,27 @@ internal partial class AsyncLock
     }
 
     public async ValueTask<bool> TryLock(Action body,
-                                         int waitForMillis = 0,
-                                         [CallerMemberName] string memberName = "",
-                                         [CallerFilePath] string sourceFilePath = "",
-                                         [CallerLineNumber] int sourceLineNumber = 0)
+        int waitForMillis = 0,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return await this.TryLock(_ => body.Invoke(), waitForMillis, memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+        return await this.TryLock(_ => body.Invoke(), waitForMillis, memberName: memberName, sourceFilePath: sourceFilePath,
+            sourceLineNumber: sourceLineNumber);
     }
 
     public async ValueTask<bool> TryLock(Action<CancellationToken> body,
-                                         int waitForMillis = 0,
-                                         CancellationToken ct = default,
-                                         [CallerMemberName] string memberName = "",
-                                         [CallerFilePath] string sourceFilePath = "",
-                                         [CallerLineNumber] int sourceLineNumber = 0)
+        int waitForMillis = 0,
+        CancellationToken ct = default,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         if (this.IsDebug)
         {
             lock (this.semaphore)
             {
-                if ((this.semaphore.CurrentCount > 0) && this.CurrentTaskAlreadyHolding())
+                if (this.semaphore.CurrentCount > 0 && this.CurrentTaskAlreadyHolding())
                 {
                     this.onSameTaskTriesToEnterError?.Invoke(new StackTrace().ToString());
                 }
@@ -354,5 +346,16 @@ internal partial class AsyncLock
         }
 
         return false;
+    }
+
+    [Conditional("DEBUG")]
+    private void CheckDebug()
+    {
+        this.IsDebug = true;
+    }
+
+    private bool CurrentTaskAlreadyHolding()
+    {
+        return Task.CurrentId == this.taskHolding && Task.CurrentId != null;
     }
 }
