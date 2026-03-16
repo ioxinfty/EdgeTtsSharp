@@ -3,7 +3,7 @@
 - 针对 `EdgeTts.GetAudioStre` 加入对返回异常的支持，当连接失败时，会抛出异常
 - 加入对 `macOS` 系统的支持
 - 进行了一些性能上的优化
-- - 加入对代理的支持
+- 加入对代理的支持
 - 针对从中国地区的访问进行了优化，原作者参考 [Entity-Now/Edge_tts_sharp](https://github.com/Entity-Now/Edge_tts_sharp) 可能是旧版本的，现在将验证流程都迁移了过来
 
 ## Overview
